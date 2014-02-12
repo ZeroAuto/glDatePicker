@@ -6,7 +6,7 @@
 <body>
     <input type="text" id="mydate" gldp-id="mydate" />
     <div gldp-el="mydate"
-         style="width:400px; height:300px; position:absolute; top:70px; left:100px;">
+         style="width:300px; height:250px; position:absolute; top:70px; left:100px;">
     </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="glDatePicker.min.js"></script>
@@ -14,9 +14,35 @@
     <script type="text/javascript">
         $(window).load(function()
         {
+          var now = new Date();
+          var today = new Date(new Date(now).setDate(now.getDate()));
+          var thirtyDaysAgo = new Date(new Date(now).setDate(now.getDate() - 30 ));
+          var todayDate = today.getDate();
+          var todayYear = today.getFullYear();
+          var todayMonth = today.getMonth();
+          var thirtyDaysAgoDate = thirtyDaysAgo.getDate();
+          var thirtyDaysAgoYear = thirtyDaysAgo.getFullYear();
+          var thirtyDaysAgoMonth = thirtyDaysAgo.getMonth();
             $('input').glDatePicker({
               showAlways: true,
-              cssName: 'custom'
+              cssName: 'custom',
+              selectableDateRange: [
+                {
+                  from: new Date(thirtyDaysAgoYear, thirtyDaysAgoMonth, thirtyDaysAgoDate),
+                  to: new Date(todayYear, todayMonth, todayDate)
+                },
+              ],
+              onClick: (function(el, cell, date, data) {
+                  el.val(date.toLocaleDateString());
+                  // window.open("https://www.google.com/");
+                  var clickedDay = date.getDate();
+                  var clickedYear = date.getFullYear();
+                  var clickedMonth = date.getMonth();
+                  console.log(clickedYear);
+                  console.log(clickedMonth);
+                  console.log(clickedDay);
+                  top.location.href = '/onair/'+clickedYear+'-'+clickedMonth+'-'+clickedDay+'/';
+              }),
             });
             console.log('everything is working');
         });
